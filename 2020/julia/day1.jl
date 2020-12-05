@@ -1,5 +1,5 @@
 
-INPUT_FILE = "../inputs/day1_input.txt"
+INPUT_FILE = "inputs/day1_input.txt"
 
 function load_data()
     data = readlines(INPUT_FILE)
@@ -17,7 +17,19 @@ function find_nums(data)
     end
 end
 
+function find_nums_part2(data)
+    for i in 1:length(data)
+        for j in i:length(data)
+            for k in j:length(data)
+                if data[i] + data[j] + data[k] == 2020
+                    return data[i] * data[j] * data[k]
+                end
+            end
+        end
+    end
+end
+
 
 data = load_data()
-mult = find_nums(data)
+mult = find_nums_part2(data)
 println(mult)
