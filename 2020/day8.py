@@ -77,8 +77,6 @@ def main_part_2():
     while i < len(data):
         data_tmp = copy.deepcopy(data)
         data_tmp, i = change_next_value(data_tmp, i)
-        if i > len(data):
-            break
         acum, idx = run_part2(data_tmp)
         if idx == len(data):
             break
