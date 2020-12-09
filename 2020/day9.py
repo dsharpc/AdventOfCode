@@ -33,6 +33,8 @@ def find_contiguous_sum(data, target):
         for j in range(len(data)):
             if sum(data[i:j]) == target:
                 return max(data[i:j]) + min(data[i:j])
+            elif sum(data[i:j]) > target:
+                break
 
 def main_part2():
     data = load_data()
