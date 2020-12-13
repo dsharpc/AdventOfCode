@@ -1,5 +1,5 @@
-import math
-INPUT_FILE = 'inputs/test_day13_input.txt'
+from functools import reduce
+INPUT_FILE = 'inputs/day13_input.txt'
 
 
 def load_data():
@@ -32,25 +32,24 @@ def parse_data_p2(data):
     bus_ids = [x for x in data[1].split(',')]
     return bus_ids
 
-def find_t(tracker):
-    maxim = max(tracker.items(), key = lambda x: x[1]['depart'])[0]
-    itern = 0
-    x = 1
+def mod_mult_inv(m,a):
+    rem = a%m
+    if rem == 1:
+        return 1
+    mult = 2
+    res = 2
     while True:
-        t = tracker[maxim]['depart']*x - tracker[maxim]['offset']
-        mods = 0
-        for key in tracker.keys():
-            if key == maxim:
-                continue
-            mod = (t + tracker[key]['offset']) % tracker[key]['depart']
-            if mod > 0:
-                mods+=1
-                break
-        if mods == 0:
-            return t
-        
-        x+=1
-        itern+=1
+        res = rem*mult % m
+        if res == 1:
+            return mult
+        mult+=1
+
+def chinese_remainder_theorem(tracker):
+    x = 0
+    m = reduce(lambda x, y: x*y, [v['m'] for _,v in tracker.items()])
+    for _, v in tracker.items():
+        x += v['a'] * m/v['m'] * mod_mult_inv(v['m'],m/v['m'])
+    return x % m
 
 def main_part2():
     data = load_data()
@@ -59,9 +58,12 @@ def main_part2():
     for i, bus_id in enumerate(bus_ids):
         if bus_id=='x':
             continue
-        tracker[bus_id] = {'offset': i, 'depart': int(bus_id)}
-
-    t = find_t(tracker)
+        # Following line works for validation inputs
+        #tracker[bus_id] = {'a': int(bus_id) - (i % int(bus_id)) , 'm': int(bus_id)}
+        # For some reason need to add a 1 for it to work with test input
+        tracker[bus_id] = {'a': int(bus_id) - (i % int(bus_id)) + 1 , 'm': int(bus_id)}        
+    print(tracker)
+    t = chinese_remainder_theorem(tracker)
     print(t)
 
 main_part2()
