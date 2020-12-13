@@ -1,3 +1,4 @@
+import math
 INPUT_FILE = 'inputs/test_day13_input.txt'
 
 
@@ -31,13 +32,25 @@ def parse_data_p2(data):
     bus_ids = [x for x in data[1].split(',')]
     return bus_ids
 
-def check_same_depart(tracker):
-    vals = [x['depart'] - x['offset'] for x in tracker.values()]
-    if len(set(vals))==1:
-        return True
-    else:
-        return False
-
+def find_t(tracker):
+    maxim = max(tracker.items(), key = lambda x: x[1]['depart'])[0]
+    itern = 0
+    x = 1
+    while True:
+        t = tracker[maxim]['depart']*x - tracker[maxim]['offset']
+        mods = 0
+        for key in tracker.keys():
+            if key == maxim:
+                continue
+            mod = (t + tracker[key]['offset']) % tracker[key]['depart']
+            if mod > 0:
+                mods+=1
+                break
+        if mods == 0:
+            return t
+        
+        x+=1
+        itern+=1
 
 def main_part2():
     data = load_data()
@@ -48,12 +61,7 @@ def main_part2():
             continue
         tracker[bus_id] = {'offset': i, 'depart': int(bus_id)}
 
-    while True:
-        same = check_same_depart(tracker)
-        if same:
-            break
-        lowest = min(tracker.items(), key=lambda x: x[1].get('depart'))[0]
-        tracker[lowest]['depart'] += int(lowest)
-    print([v['depart'] for k,v in tracker.items() if v['offset'] == 0])
+    t = find_t(tracker)
+    print(t)
 
 main_part2()
