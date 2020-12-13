@@ -33,7 +33,6 @@ def parse_data_p2(data):
 
 def check_same_depart(tracker):
     vals = [x['depart'] - x['offset'] for x in tracker.values()]
-    mvals = max(vals)
     if len(set(vals))==1:
         return True
     else:
