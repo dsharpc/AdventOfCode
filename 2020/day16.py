@@ -37,7 +37,7 @@ def main_part1():
                 break
     print(error_rate)
 
-# main_part1()
+main_part1()
 
 
 def parse_rules_part2(data):
@@ -85,7 +85,6 @@ def main_part2():
             rule_mapping[crule] = matches[0][0]
         if len(candidate_rules) > 0:
             cand = (cand+1)% (len(candidate_rules))
-    print(rule_mapping)
     my_ticket = parse_my_ticket(data)
     res_sum = 1
     for k,v in rule_mapping.items():
